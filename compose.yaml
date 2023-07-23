@@ -17,6 +17,7 @@ services:
     container_name: broker_one
     ports:
       - "9092:9092"
+      - "29092:29092"
     depends_on:
       - the_zookeeper
     environment:
@@ -25,3 +26,13 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker_one:9092,PLAINTEXT_HOST://localhost:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  goapp:
+    build: ./golang
+    container_name: goapp
+    depends_on:
+      - broker_one
+    volumes:
+      - type: bind
+        source: ./golang
+        target: /usr/src/app
