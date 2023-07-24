@@ -9,7 +9,6 @@ http requests are captured via fluentd and POST data is sent to a kafka topic.
 * docker-compose up -d
 * docker-compose exec broker_one bash
 * kafka-topics --create --topic http_logs --bootstrap-server broker_one:9092
-* 
 
 ##### Monitor kafka topic
 * docker-compose exec broker_one bash
