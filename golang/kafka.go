@@ -24,7 +24,7 @@ func main() {
 	for run {
 		 msg, err := con.ReadMessage(time.Second)
 		 if err == nil {
-			fmt.Println(msg)
+			fmt.Println(string(msg.Value))
 		 } else if !err.(kafka.Error).IsTimeout() {
 			fmt.Printf("Consumer error: %v (%v)\n", err, msg)
 		 }

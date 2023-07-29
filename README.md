@@ -16,4 +16,4 @@ http requests are captured via fluentd and POST data is sent to a kafka topic.
 * kafka-console-consumer --topic http_logs --from-beginning --bootstrap-server broker_one:9092
 
 ##### Send http request
-curl -X POST -d 'json={parikshit, India}' http://127.0.0.1:9880/source.http
+curl -X POST -d 'parikshit, India' http://127.0.0.1:9880/source.http
