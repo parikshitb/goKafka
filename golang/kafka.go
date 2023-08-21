@@ -5,15 +5,20 @@ import (
 )
 
 func getConsumer() (*kafka.Consumer, error) {
-	con, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": "broker_one:9092",
-		"group.id": "gokafka",
-		"auto.offset.reset": "earliest",
-	})
+	configurations := getConsumerConfig()
+	con, err := kafka.NewConsumer(&configurations)
 	if err != nil {
 		return nil, err
 	}
 
 	con.SubscribeTopics([]string{"http_logs"}, nil)
 	return con, nil
+}
+
+func getConsumerConfig() kafka.ConfigMap{
+	configurations := make(map[string]kafka.ConfigValue)
+	configurations["bootstrap.servers"] = "broker_one:9092"
+	configurations["group.id"] = "gokafka"
+	configurations["auto.offset.reset"] = "earliest"
+	return configurations
 }
