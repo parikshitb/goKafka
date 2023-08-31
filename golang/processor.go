@@ -1,26 +1,42 @@
-package main 
+package main
 
 import (
-	"syscall"
-	"os"
 	"fmt"
-	"time"
-	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
+	"os"
 	"os/signal"
+	"sync"
+	"syscall"
+	"time"
+
+	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
 func main() {
-	//Since the topic is not created when the containers are up (using docker-composer up -d), 
-	//getting a consumser (getConsumer()) returns without proper metadata.
+	//Since the topic is not created when the containers are up (using docker-composer up -d),
+	//getting a consumser (GetConsumer()) returns without proper metadata.
 	//Therefore, a delay is added during which we can create necessary topic
 	//TODO: How do we do this production?
 	time.Sleep(60 * time.Second)
-	consumer, err := getConsumer()
+	consumerCh := make(chan *kafka.Consumer)
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go initializeConsumer(consumerCh)
+	go consume(consumerCh, &wg)
+	wg.Wait()
+}
+
+func initializeConsumer(out chan *kafka.Consumer) {
+	consumer, err := GetConsumer()
 	if err != nil {
 		fmt.Printf("Failed to create consumer. %s", err)
 		os.Exit(1)
 	}
-	
+	out <- consumer
+}
+
+func consume(in chan *kafka.Consumer, wg *sync.WaitGroup) {
+	consumer := <-in
+	defer consumer.Close()
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 	run := true
@@ -40,5 +56,5 @@ func main() {
 			run = false
 		}
 	}
-	consumer.Close()
+	wg.Done()
 }
