@@ -1,6 +1,7 @@
 package main
 
 import (
+	kavka "example/hello/pkg/kafka"
 	"fmt"
 	"os"
 	"os/signal"
@@ -26,7 +27,7 @@ func main() {
 }
 
 func initializeConsumer(out chan *kafka.Consumer) {
-	consumer, err := GetConsumer()
+	consumer, err := kavka.GetConsumer()
 	if err != nil {
 		fmt.Printf("Failed to create consumer. %s", err)
 		os.Exit(1)
