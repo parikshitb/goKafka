@@ -1,13 +1,14 @@
 package main
 
 import (
-	kavka "example/hello/pkg/kafka"
 	"fmt"
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
 	"time"
+
+	kavka "github.com/parikshitb/gokafka/pkg/kafka"
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
