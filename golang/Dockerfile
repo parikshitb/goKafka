@@ -12,4 +12,4 @@ RUN go mod download && go mod verify
 COPY . .
 RUN go build -v -o /usr/local/bin/app/ ./...
 
-CMD ["/usr/local/bin/app/hello"]
+CMD ["/usr/local/bin/app/gokafka"]

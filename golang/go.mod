@@ -1,4 +1,4 @@
-module example/hello
+module github.com/parikshitb/gokafka
 
 go 1.20
 
